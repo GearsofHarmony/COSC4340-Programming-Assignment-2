@@ -1,6 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\OpenGL",
+    "\\RomaniaProblem"
   ],
+  "SelectedNode": "\\OpenGL\\glad.c",
   "PreviewInSolutionExplorer": false
 }
