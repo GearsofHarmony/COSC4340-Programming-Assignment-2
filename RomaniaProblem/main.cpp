@@ -2,7 +2,9 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include <fstream>
 #include "constants.h"
+#include "Nodes.h"
 //#include "mainGame.h"
 using namespace std;
 
@@ -11,6 +13,114 @@ using namespace std;
 
 static void framebuffer_size_callback(GLFWwindow*, int, int);
 //static void mouse_callback(GLFWwindow*, double, double);
+
+struct Test : Nodeptr
+{
+	short num;
+	explicit Test(short inNum) :num(inNum) {};
+	void print()
+	{
+		cout << num << ' ';
+	}
+};
+
+void ListTest()
+{
+	Node* list = new Node[4];
+	//Node list[4];
+	cout << endl << "Insert into List 0: L1";
+	Node::insertLeft(&list[0], new Test(1));
+	cout << endl << "Insert into List 0: L2";
+	Node::insertLeft(&list[0], new Test(2));
+	cout << endl << "Insert into List 0: L3";
+	Node::insertLeft(&list[0], new Test(3));
+
+	cout << endl << "Insert into List 1: R1";
+	Node::insertRight(&list[1], new Test(1));
+	cout << endl << "Insert into List 1: R2";
+	Node::insertRight(&list[1], new Test(2));
+	cout << endl << "Insert into List 1: R3";
+	Node::insertRight(&list[1], new Test(3));
+
+	cout << endl << "Insert into List 2: L1";
+	Node::insertLeft(&list[2], new Test(1));
+	cout << endl << "Insert into List 1: R2";
+	Node::insertRight(&list[2], new Test(2));
+	cout << endl << "Insert into List 1: L3";
+	Node::insertLeft(&list[2], new Test(3));
+
+	cout << endl << "Insert into List 3: L1";
+	Node::insertLeft(&list[3], new Test(1));
+	cout << endl << "Insert into List 3: L2";
+	Node::insertLeft(&list[3], new Test(2));
+	cout << endl << "Insert into List 3: R3";
+	Node::insertRight(&list[3], new Test(3));
+
+	for (int ii = 0; ii < 4; ii++)
+	{
+		cout << endl << "List " << ii << ": ";
+		Node::printList(&list[ii]);
+	}
+
+	cout << endl << "Delete from List 0: L";
+	Node::deleteLeft(&list[0]);
+	cout << endl << "Delete from List 0: L";
+	Node::deleteLeft(&list[0]);
+	cout << endl << "Delete from List 0: L";
+	Node::deleteLeft(&list[0]);
+	cout << endl << "Delete from List 0: L";
+	Node::deleteLeft(&list[0]);
+	cout << endl << "Delete from List 1: R";
+	Node::deleteRight(&list[1]);
+	cout << endl << "Delete List 2:";
+	Node::deleteList(&list[2]);
+	cout << endl << "Delete from List 3: R";
+	Node::deleteRight(&list[3]);
+	cout << endl << "Delete from List 3: R";
+	Node::deleteRight(&list[3]);
+	cout << endl << "Delete from List 3: R";
+	Node::deleteRight(&list[3]);
+	cout << endl << "Delete from List 3: R";
+	Node::deleteRight(&list[3]);
+	cout << endl;
+
+	for (int ii = 0; ii < 4; ii++)
+	{
+		cout << endl << "List " << ii << ": ";
+		Node::printList(&list[ii]);
+	}
+	FREE_ARRAY(list);
+}
+
+struct Data : Nodeptr
+{
+	short Destination;
+	short Distance;
+	explicit Data(short inDest, short inDist) :Destination(inDest), Distance(inDist) {};
+	void print()
+	{
+		cout << Destination << ' ' << Distance << ' ';
+	}
+};
+
+void readInput(Node* List, int size = 0)
+{
+	char file[] = { "input.txt" };
+	int city1, city2, dist;
+	fstream fin(file, ios::in);
+	if (fin.is_open())
+	{
+		while (fin.eof() == false)
+		{
+			fin >> city1 >> city2 >> dist;
+			Node::insertLeft(&List[city1], new Data(city2, dist));
+			Node::insertLeft(&List[city2], new Data(city1, dist));
+		}
+		fin.close();
+	}
+	else
+		cout << "Error opening file: " << file << endl;
+}
 
 int main()
 {
@@ -46,6 +156,17 @@ int main()
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
+
+	ListTest();
+	//Node List[20];
+	//readInput(&List[0], 20); 
+	//Data dat;
+	//dat = Node::getFirst(&List[0]);
+	//for (int ii = 0; ii < 20; ii++)
+	//{
+	//	cout << endl << "List " << ii << ": ";
+	//	Node::printList(&List[ii]);
+	//}
 
 	//MainGame* game = new MainGame();
 	//game->initialize(window);
