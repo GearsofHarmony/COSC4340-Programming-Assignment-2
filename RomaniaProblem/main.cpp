@@ -14,18 +14,13 @@ using namespace std;
 static void framebuffer_size_callback(GLFWwindow*, int, int);
 //static void mouse_callback(GLFWwindow*, double, double);
 
-/// Example of what the data structure template parameter should be for Node class
 struct Test
 {
 	short num;
 	Test* next;
 	explicit Test(short inNum) :num(inNum) { next = NULL; };
+	friend ostream& operator<<(ostream& cout, const Test& data) { cout << data.num << ';'; return cout; }
 };
-/**
- * Custom console output stream implementation for Test
- */
-ostream& operator<<(ostream& cout, const Test& data) { cout << data.num << ' '; return cout; }
-
 /// stress testing the Node class implementation
 void ListTest()
 {
@@ -96,15 +91,15 @@ void ListTest()
 	FREE_ARRAY(list);
 	cout << endl;
 }
-
+/// Data Structure for map information
 struct Data
 {
 	short Destination;
 	short Distance;
 	Data* next;
 	explicit Data(short inDest, short inDist) :Destination(inDest), Distance(inDist) { next = NULL; };
+	friend ostream& operator<<(ostream& cout, const Data& data) { cout << data.Destination << ',' << data.Distance << ';'; return cout; }
 };
-ostream& operator<<(ostream& cout, const Data& data) { cout << data.Destination << ' ' << data.Distance << "; "; return cout; }
 
 /**
  * Read from file "input.txt" and builds Romania map
@@ -166,14 +161,14 @@ int main()
 	glDepthFunc(GL_LEQUAL);
 
 	ListTest();
-	typedef Node<Data> Node;
-	Node List[20];
+	//typedef Node<Data> Node;
+	Node<Data> List[20];
 	readInput(&List[0]); 
 	for (int ii = 0; ii < 20; ii++)
 	{
 		cout << endl << "List " << ii << ": ";
-		for (int xx = 0; xx < Node::getSize(&List[ii]); xx++)
-			cout << Node::getData(&List[ii], xx);
+		for (int xx = 0; xx < Node<Data>::getSize(&List[ii]); xx++)
+			cout << Node<Data>::getData(&List[ii], xx);
 	}
 
 	//MainGame* game = new MainGame();

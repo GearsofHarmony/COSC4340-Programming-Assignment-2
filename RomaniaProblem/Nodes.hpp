@@ -8,14 +8,15 @@
  * which can be expanded as an array of circular linked lists.
  * 
  * @tparam Nodeptr is the data type to be stored
- *     @note The user MUST implement a pointer variable named "next" that 
- *         points to it's own data type for this data structure to 
- *         work properly. For Example:
- *             struct foo
- *		       {
- *                 int randomData;
- *                 foo* next;
- *             }
+ * @note The user MUST implement a data structure (example below) to work properly.
+ *     Example:
+ *         struct foo
+ *		   {
+ *             int varA;
+ *             foo* next;
+ *             explicit foo(short inNum) :varA(inNum) { next = NULL; };
+ *             friend std::ostream& operator<<(std::ostream& cout, const foo& data) { cout << data.varA << ';'; return cout; }
+ *         }
  * @param size is the list size where if 0 the list is empty.
  * @param head is a pointer to the beginning of the list.
  */
@@ -203,7 +204,7 @@ public:
 	*     instance of cout through ostream& operator<<(ostream& cout, Data& data) 
 	*     where 'Data' is the data type used for tparam Nodeptr
 	*/
-	static void printList(Node* list)
+	static void printList(const Node* list)
 	{
 		Nodeptr* ptr;
 		ptr = list->head;
