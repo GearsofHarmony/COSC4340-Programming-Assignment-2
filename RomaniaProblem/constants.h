@@ -6,7 +6,7 @@
 const float PI = 3.1415926f;
 const int WIDTH = 800;
 const int HEIGHT = 600;
-
+// List of cities
 enum City 
 { 
 	Bucharest, Oradea, Zerind, Arad, 
@@ -15,7 +15,8 @@ enum City
 	Pitesti, Giurgiu, Urziceni, Hirsova, 
 	Eforie, Vaslui, Iasi, Neamt 
 };
-
-template<typename T> void FREE(T*& ptr) { if (ptr) { delete(ptr); (ptr) = 0; } };
-template<typename T> void FREE_ARRAY(T*& ptr) { if (ptr) { delete[](ptr); (ptr) = 0; } };
+/// Safe delete pointer in heap
+template<typename T> void FREE(T*& ptr) { if (ptr) { delete(ptr); (ptr) = NULL; } };
+/// Safe delete pointer array in heap
+template<typename T> void FREE_ARRAY(T*& ptr) { if (ptr) { delete[](ptr); (ptr) = NULL; } };
 #endif // !CONSTANTS_H

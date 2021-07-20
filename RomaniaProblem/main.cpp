@@ -4,7 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include "constants.h"
-#include "Nodes.h"
+#include "Nodes.hpp"
 //#include "mainGame.h"
 using namespace std;
 
@@ -14,18 +14,22 @@ using namespace std;
 static void framebuffer_size_callback(GLFWwindow*, int, int);
 //static void mouse_callback(GLFWwindow*, double, double);
 
-struct Test : Nodeptr
+/// Example of what the data structure template parameter should be for Node class
+struct Test
 {
 	short num;
-	explicit Test(short inNum) :num(inNum) {};
-	void print()
-	{
-		cout << num << ' ';
-	}
+	Test* next;
+	explicit Test(short inNum) :num(inNum) { next = NULL; };
 };
+/**
+ * Custom console output stream implementation for Test
+ */
+ostream& operator<<(ostream& cout, const Test& data) { cout << data.num << ' '; return cout; }
 
+/// stress testing the Node class implementation
 void ListTest()
 {
+	typedef Node<Test> Node; // Nice shorthand to use
 	Node* list = new Node[4];
 	//Node list[4];
 	cout << endl << "Insert into List 0: L1";
@@ -90,20 +94,24 @@ void ListTest()
 		Node::printList(&list[ii]);
 	}
 	FREE_ARRAY(list);
+	cout << endl;
 }
 
-struct Data : Nodeptr
+struct Data
 {
 	short Destination;
 	short Distance;
-	explicit Data(short inDest, short inDist) :Destination(inDest), Distance(inDist) {};
-	void print()
-	{
-		cout << Destination << ' ' << Distance << ' ';
-	}
+	Data* next;
+	explicit Data(short inDest, short inDist) :Destination(inDest), Distance(inDist) { next = NULL; };
 };
+ostream& operator<<(ostream& cout, const Data& data) { cout << data.Destination << ' ' << data.Distance << "; "; return cout; }
 
-void readInput(Node* List, int size = 0)
+/**
+ * Read from file "input.txt" and builds Romania map
+ * @param 'List' is a pointer to the referenced list strongly recommend typing "&List[index]
+ * @throw basic if the file fails to open then a message is displayed and the function passes without conducting primary task.
+ */
+void readInput(Node<Data>* List)
 {
 	char file[] = { "input.txt" };
 	int city1, city2, dist;
@@ -113,8 +121,8 @@ void readInput(Node* List, int size = 0)
 		while (fin.eof() == false)
 		{
 			fin >> city1 >> city2 >> dist;
-			Node::insertLeft(&List[city1], new Data(city2, dist));
-			Node::insertLeft(&List[city2], new Data(city1, dist));
+			Node<Data>::insertLeft(&List[city1], new Data(city2, dist));
+			Node<Data>::insertLeft(&List[city2], new Data(city1, dist));
 		}
 		fin.close();
 	}
@@ -158,15 +166,15 @@ int main()
 	glDepthFunc(GL_LEQUAL);
 
 	ListTest();
-	//Node List[20];
-	//readInput(&List[0], 20); 
-	//Data dat;
-	//dat = Node::getFirst(&List[0]);
-	//for (int ii = 0; ii < 20; ii++)
-	//{
-	//	cout << endl << "List " << ii << ": ";
-	//	Node::printList(&List[ii]);
-	//}
+	typedef Node<Data> Node;
+	Node List[20];
+	readInput(&List[0]); 
+	for (int ii = 0; ii < 20; ii++)
+	{
+		cout << endl << "List " << ii << ": ";
+		for (int xx = 0; xx < Node::getSize(&List[ii]); xx++)
+			cout << Node::getData(&List[ii], xx);
+	}
 
 	//MainGame* game = new MainGame();
 	//game->initialize(window);
