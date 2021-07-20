@@ -1,2 +1,4 @@
 # Ignore these files!
 **/.vs/*
+RomaniaProblem/Debug/*
+RomaniaProblem/Release/*
