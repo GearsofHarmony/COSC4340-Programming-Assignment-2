@@ -6,6 +6,7 @@
 const float PI = 3.1415926f;
 const int WIDTH = 800;
 const int HEIGHT = 600;
+const int MSIZE = 20;
 // List of cities
 enum City 
 { 

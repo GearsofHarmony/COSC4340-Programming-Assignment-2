@@ -3,26 +3,28 @@
 #define BOARD_H
 #include <iostream>
 #include <fstream>
+#include "constants.h"
 #include "Nodes.hpp"
 //#include "Stacks.hpp"
 using namespace std;
 
-const int MSIZE = 20;
+/**
+ * CityDat is the data of each location and the distance to travel to reach destination
+ */
 struct CityDat
 {
 	short Destination;
 	short Distance;
-	//CityDat* next;
 	explicit CityDat(short inDest = 0, short inDist = 0) :Destination(inDest), Distance(inDist) {};
 	friend std::ostream& operator<<(std::ostream& cout, const CityDat& data) 
 	{ 
 		switch (data.Destination)
 		{
-		case 0: cout << "A-Bucharest, "; break;
-		case 1: cout << "B-Oradea, "; break;
-		case 2: cout << "C-Zerind, "; break;
-		case 3: cout << "D-Arad, "; break;
-		case 4: cout << "E-Timisoara, "; break;
+		case 0: cout << "Bucharest, "; break;
+		case 1: cout << "Oradea, "; break;
+		case 2: cout << "Zerind, "; break;
+		case 3: cout << "Arad, "; break;
+		case 4: cout << "Timisoara, "; break;
 		case 5: cout << "Lugoj, "; break;
 		case 6: cout << "Mehadia, "; break;
 		case 7: cout << "Drobeta, "; break;
@@ -42,17 +44,31 @@ struct CityDat
 		return cout; 
 	}
 };
-
+/**
+ * Class BaseBoard is the base template for gui interface and base information for all search algorithms
+ * @param Map is the base map to build each search algorithm's map this is not and will not be modified
+ * @param startNode is the starting location the user chooses
+ * @param endNode is the destination location the algorithm searches for.
+ */
 class BaseBoard
 {
-public:
+protected:
 	Node<CityDat> Map[MSIZE];
 	short startNode;
 	short endNode;
 
+public:
+	/**
+	* This constructor reads from a file that contains the map data and builds the map
+	*/
 	BaseBoard();
+	// Currently does nothing
 	~BaseBoard();
+	/**
+	* Draws the map in terminal
+	*/
 	virtual void draw();
+	// currently does nothing
 	virtual void update();
 };
 
@@ -60,41 +76,88 @@ class SelectionBoard
 {
 
 };
-
+/**
+* Depth First Search board that searches the map for the chosen destination
+* @param DFSMap is used to check if a location is visited or not by deleting said location from list
+* @param path is the final route taken to destination from origin
+* @param done is checked if the DFS is done searching or not
+*/
 class DFSBoard : BaseBoard
 {
-public:
+protected:
 	Node<CityDat> DFSMap[MSIZE];
 	Node<CityDat> path;
 	bool done;
 
+public:
 	DFSBoard();
+	/// @return if the search is done or not
+	bool isDone() { return done; }
+	/**
+	* Draws the map in terminal
+	*/
 	void draw();
+	/**
+	* Main loop of search algorithm by one iteration
+	*/
 	void update();
 };
-
+/**
+* Breadth First Search board that searches the map for the chosen destination
+* @param BFSMap is used to check if a location is visited or not by deleting said location from list
+* @param toVisit is a place holder for locations to visit before proceeding to the next breadth iteration
+* @param path is the final route taken to destination from origin
+* @param done is checked if the DFS is done searching or not
+*/
 class BFSBoard : BaseBoard
 {
-public:
+protected:
 	Node<CityDat> BFSMap[MSIZE];
 	Node<CityDat> toVisit;
 	Node<CityDat> path;
 	bool done;
 
+public:
 	BFSBoard();
+	/// @return if the search is done or not
+	bool isDone() { return done; }
+	/**
+	* Draws the map in terminal
+	*/
 	void draw();
+	/**
+	* Main loop of search algorithm by one iteration
+	*/
 	void update();
 };
-
+/**
+* Iterative Deepening Search board that searches the map for the chosen destination
+* @param IDSMap is used to check if a location is visited or not by deleting said location from list
+* @param path is the final route taken to destination from origin
+* @param depthLimit is the limit must attempt to reach before iterating to the next level of the graph
+* @param depth is the current depth iteration
+* @param done is checked if the DFS is done searching or not
+*/
 class IDSBoard : BaseBoard
 {
-public:
-	Node<CityDat> toVisit[MSIZE];
+protected:
+	Node<CityDat> IDSMap[MSIZE];
 	Node<CityDat> path;
+	int depthLimit;
+	int depth;
 	bool done;
 
+public:
 	IDSBoard();
+	/// @return if the search is done or not
+	bool isDone() { return done; }
+	/**
+	* Draws the map in terminal
+	*/
 	void draw();
+	/**
+	* Main loop of search algorithm by one iteration
+	*/
 	void update();
 };
 #endif

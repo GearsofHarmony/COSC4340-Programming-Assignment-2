@@ -3,8 +3,10 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <fstream>
+#include <string>
 #include "constants.h"
-#include "Nodes.hpp"
+//#include "Nodes.hpp"
+#include "Board.h"
 //#include "mainGame.h"
 using namespace std;
 
@@ -14,17 +16,18 @@ using namespace std;
 static void framebuffer_size_callback(GLFWwindow*, int, int);
 //static void mouse_callback(GLFWwindow*, double, double);
 
+/// Start!
+/// stress testing the Node class implementation
 struct Test
 {
 	short num;
-	Test* next;
-	explicit Test(short inNum) :num(inNum) { next = NULL; };
+	Test(short inNum) :num(inNum) {};
 	friend ostream& operator<<(ostream& cout, const Test& data) { cout << data.num << ';'; return cout; }
 };
-/// stress testing the Node class implementation
 void ListTest()
 {
 	typedef Node<Test> Node; // Nice shorthand to use
+	typedef Nodeptr<Test> Test;
 	Node* list = new Node[4];
 	//Node list[4];
 	cout << endl << "Insert into List 0: L1";
@@ -96,11 +99,9 @@ struct Data
 {
 	short Destination;
 	short Distance;
-	Data* next;
-	explicit Data(short inDest, short inDist) :Destination(inDest), Distance(inDist) { next = NULL; };
+	Data(short inDest, short inDist) :Destination(inDest), Distance(inDist) {};
 	friend ostream& operator<<(ostream& cout, const Data& data) { cout << data.Destination << ',' << data.Distance << ';'; return cout; }
 };
-
 /**
  * Read from file "input.txt" and builds Romania map
  * @param 'List' is a pointer to the referenced list strongly recommend typing "&List[index]
@@ -116,14 +117,56 @@ void readInput(Node<Data>* List)
 		while (fin.eof() == false)
 		{
 			fin >> city1 >> city2 >> dist;
-			Node<Data>::insertLeft(&List[city1], new Data(city2, dist));
-			Node<Data>::insertLeft(&List[city2], new Data(city1, dist));
+			Node<Data>::insertLeft(&List[city1], new Nodeptr<Data>(Data(city2, dist)));
+			Node<Data>::insertLeft(&List[city2], new Nodeptr<Data>(Data(city1, dist)));
 		}
 		fin.close();
 	}
 	else
 		cout << "Error opening file: " << file << endl;
 }
+
+/// Test loop for functionality!
+void test()
+{
+	//ListTest();
+
+	//Node<Data> List[20];
+	//readInput(&List[0]);
+	//for (int ii = 0; ii < 20; ii++)
+	//{
+	//	cout << endl << "List " << ii << ": ";
+	//	for (int xx = 0; xx < Node<Data>::getSize(&List[ii]); xx++)
+	//		cout << Node<Data>::getData(&List[ii], xx);
+	//}
+	// 
+	DFSBoard sample1;
+	BFSBoard sample2;
+	IDSBoard sample3;
+	short count[3] = { 0 };
+	while (sample1.isDone() == false || sample2.isDone() == false || sample3.isDone() == false)
+	{
+		if (sample1.isDone() == false)
+		{
+			count[0]++;
+			cout << endl << "DFS";sample1.update();
+		}
+		if (sample2.isDone() == false)
+		{
+			count[1]++;
+			cout << endl << "BFS"; sample2.update();
+		}
+		if (sample3.isDone() == false)
+		{
+			count[2]++;
+			cout << endl << "IDS"; sample3.update();
+		}
+	}
+	cout << endl << "DFS" << endl << "Count: " << count[0]; sample1.draw();
+	cout << endl << "BFS" << endl << "Count: " << count[1]; sample2.draw();
+	cout << endl << "IDS" << endl << "Count: " << count[2]; sample3.draw();
+}
+/// From start to can be deleted. All for testing!
 
 int main()
 {
@@ -160,16 +203,7 @@ int main()
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
 
-	ListTest();
-	//typedef Node<Data> Node;
-	Node<Data> List[20];
-	readInput(&List[0]); 
-	for (int ii = 0; ii < 20; ii++)
-	{
-		cout << endl << "List " << ii << ": ";
-		for (int xx = 0; xx < Node<Data>::getSize(&List[ii]); xx++)
-			cout << Node<Data>::getData(&List[ii], xx);
-	}
+	test();
 
 	//MainGame* game = new MainGame();
 	//game->initialize(window);
