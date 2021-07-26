@@ -72,9 +72,14 @@ public:
 	virtual void update();
 };
 
-class SelectionBoard
+class SelectionBoard : BaseBoard
 {
-
+public:
+	void draw();
+	void update();
+	bool makingChoices();
+	City getStartingPoint();
+	City getEndingPoint();
 };
 /**
 * Depth First Search board that searches the map for the chosen destination
@@ -91,6 +96,7 @@ protected:
 
 public:
 	DFSBoard();
+	DFSBoard(City startingPoint, City endingPoint);
 	/// @return if the search is done or not
 	bool isDone() { return done; }
 	/**
@@ -119,6 +125,7 @@ protected:
 
 public:
 	BFSBoard();
+	BFSBoard(City startingPoint, City endingPoint);
 	/// @return if the search is done or not
 	bool isDone() { return done; }
 	/**
@@ -149,6 +156,7 @@ protected:
 
 public:
 	IDSBoard();
+	IDSBoard(City startingPoint, City endingPoint);
 	/// @return if the search is done or not
 	bool isDone() { return done; }
 	/**

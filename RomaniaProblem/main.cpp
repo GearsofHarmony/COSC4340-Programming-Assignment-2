@@ -8,6 +8,7 @@
 //#include "Nodes.hpp"
 #include "Board.h"
 //#include "mainGame.h"
+#include "GraphicalInterface.h"
 using namespace std;
 
 #define _CRTDBG_MAP_ALLOC
@@ -202,11 +203,9 @@ int main()
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
+	glViewport(0,0,WIDTH, HEIGHT);
 
-	test();
-
-	//MainGame* game = new MainGame();
-	//game->initialize(window);
+	GraphicalInterface gui;
 	while (!glfwWindowShouldClose(window))
 	{
 		//game->run(window);	//main loop of program
@@ -219,7 +218,7 @@ int main()
 		// ------
 		glClearColor(0.1f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+		gui.run();
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
 		glfwSwapBuffers(window);

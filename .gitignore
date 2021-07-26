@@ -2,3 +2,5 @@
 **/.vs/*
 RomaniaProblem/Debug/*
 RomaniaProblem/Release/*
+*.tlog
+*.idb

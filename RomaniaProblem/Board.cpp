@@ -31,6 +31,23 @@ void BaseBoard::draw()
 }
 void BaseBoard::update() {};
 
+
+void SelectionBoard::draw() {
+	
+}
+void SelectionBoard::update() {
+
+}
+bool SelectionBoard::makingChoices() {
+	return true;
+}
+City SelectionBoard::getStartingPoint() {
+	return City::Bucharest;
+}
+City SelectionBoard::getEndingPoint() {
+	return City::Timisoara;
+}
+
 DFSBoard::DFSBoard()
 {
 	typedef Node<CityDat> Node;
@@ -50,6 +67,26 @@ DFSBoard::DFSBoard()
 
 	draw();
 }
+
+DFSBoard::DFSBoard(City startingPoint, City endingPoint) {
+	this->startNode = short(startingPoint);
+	this->endNode = short(endingPoint);
+	typedef Node<CityDat> Node;
+	typedef Nodeptr<CityDat> Nodeptr;
+	done = false;
+
+	for (int ii = 0; ii < MSIZE; ii++) {
+		for (int xx = 0; xx < Node::getSize(&Map[ii]); xx++) {
+			if (startNode != Node::getData(&Map[ii], xx).Destination) {
+				Node::insertRight(&DFSMap[ii], new Nodeptr(Node::getData(&Map[ii], xx)));
+			}
+		}
+	}
+
+	CityDat curNode(startNode, 0);
+	Node::insertRight(&path, new Nodeptr(curNode));
+}
+
 void DFSBoard::draw()
 {
 	typedef Node<CityDat> Node;
@@ -117,6 +154,25 @@ BFSBoard::BFSBoard()
 	Node::insertRight(&toVisit, new Nodeptr(curNode));
 
 	draw();
+}
+
+BFSBoard::BFSBoard(City startingPoint, City endingPoint) {
+	this->startNode = short(startingPoint);
+	this->endNode = short(endingPoint);
+	typedef Node<CityDat> Node;
+	typedef Nodeptr<CityDat> Nodeptr;
+	done = false;
+
+	for (int ii = 0; ii < MSIZE; ii++) {
+		for (int xx = 0; xx < Node::getSize(&Map[ii]); xx++) {
+			if (startNode != Node::getData(&Map[ii], xx).Destination) {
+				Node::insertRight(&BFSMap[ii], new Nodeptr(Node::getData(&Map[ii], xx)));
+			}
+		}
+	}
+
+	CityDat curNode(startNode, 0);
+	Node::insertRight(&toVisit, new Nodeptr(curNode));
 }
 void BFSBoard::draw()
 {
@@ -194,6 +250,28 @@ IDSBoard::IDSBoard()
 
 	draw();
 }
+IDSBoard::IDSBoard(City startingPoint, City endingPoint) {
+	this->startNode = short(startingPoint);
+	this->endNode = short(endingPoint);
+
+	typedef Node<CityDat> Node;
+	typedef Nodeptr<CityDat> Nodeptr;
+	depthLimit = 0;
+	depth = 0;
+	done = false;
+
+	for (int ii = 0; ii < MSIZE; ii++) {
+		for (int xx = 0; xx < Node::getSize(&Map[ii]); xx++) {
+			if (startNode != Node::getData(&Map[ii], xx).Destination) {
+				Node::insertRight(&IDSMap[ii], new Nodeptr(Node::getData(&Map[ii], xx)));
+			}
+		}
+	}
+
+	CityDat curNode(startNode, 0);
+	Node::insertRight(&path, new Nodeptr(curNode));
+}
+
 void IDSBoard::draw()
 {
 	typedef Node<CityDat> Node;
