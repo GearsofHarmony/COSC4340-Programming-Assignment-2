@@ -1,3 +1,9 @@
+/**
+ * Author Joshua Renfro & Chandlor Ratcliffe
+ * Chandlor was beneficial to the understanding of the search 
+ * algorithms and the overall design of the class. Joshua has implemented
+ * the algorithms and implementations of the Board class as discussed.
+ */
 #pragma once
 #ifndef BOARD_H
 #define BOARD_H
@@ -5,7 +11,6 @@
 #include <fstream>
 #include "constants.h"
 #include "Nodes.hpp"
-//#include "Stacks.hpp"
 using namespace std;
 
 /**
@@ -60,22 +65,13 @@ public:
 
 	/**
 	* This constructor reads from a file that contains the map data and builds the map
+	* @param start the starting node is passed off from each sub class
 	*/
-	BaseBoard();
-	BaseBoard(int, int);
-	// Currently does nothing
-	~BaseBoard();
+	BaseBoard(short);
 	/**
 	* Draws the map in terminal
 	*/
 	virtual void draw();
-	// currently does nothing
-	virtual void update();
-};
-
-class SelectionBoard
-{
-
 };
 /**
 * Depth First Search board that searches the map for the chosen destination
@@ -91,9 +87,11 @@ protected:
 	bool done;
 
 public:
-	DFSBoard();
-	DFSBoard(int,int);
-	/// @return if the search is done or not
+	DFSBoard(short);
+	/**
+	* Check if search is done
+	* @return done
+	*/
 	bool isDone() { return done; }
 	/**
 	* Draws the map in terminal
@@ -121,9 +119,12 @@ protected:
 	bool done;
 
 public:
-	BFSBoard();
-	BFSBoard(int, int);
-	/// @return if the search is done or not
+	//BFSBoard();
+	BFSBoard(short);
+	/**
+	* Check if search is done
+	* @return done
+	*/
 	bool isDone() { return done; }
 	/**
 	* Draws the map in terminal
@@ -152,9 +153,12 @@ protected:
 	bool done;
 
 public:
-	IDSBoard();
-	IDSBoard(int, int);
-	/// @return if the search is done or not
+	//IDSBoard();
+	IDSBoard(short);
+	/**
+	* Check if search is done
+	* @return done
+	*/
 	bool isDone() { return done; }
 	/**
 	* Draws the map in terminal

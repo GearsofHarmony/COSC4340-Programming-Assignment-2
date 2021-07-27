@@ -1,10 +1,10 @@
 #include "Board.h"
 
-BaseBoard::BaseBoard()
+BaseBoard::BaseBoard(short start)
 {
 	// startNode and endNode is here temporarily I'll leave it to you to to initialize them elsewhere
-	startNode = 0;
-	endNode = 4;
+	startNode = start;
+	endNode = 0;
 	char file[] = { "input.txt" };
 	int city1, city2, dist;
 	fstream fin(file, ios::in);
@@ -16,43 +16,22 @@ BaseBoard::BaseBoard()
 			Node<CityDat>::insertRight(&Map[city1], new Nodeptr<CityDat>(CityDat(city2, dist)));
 			Node<CityDat>::insertRight(&Map[city2], new Nodeptr<CityDat>(CityDat(city1, dist)));
 		}
+		draw();
 		fin.close();
 	}
 	else
 		cout << "Error opening file: " << file << endl;
 }
-BaseBoard::BaseBoard(int start, int end)
-{
-	// startNode and endNode is here temporarily I'll leave it to you to to initialize them elsewhere
-	this->startNode = start;
-	this->endNode = end;
-	char file[] = { "input.txt" };
-	int city1, city2, dist;
-	fstream fin(file, ios::in);
-	if (fin.is_open())
-	{
-		while (fin.eof() == false)
-		{
-			fin >> city1 >> city2 >> dist;
-			Node<CityDat>::insertRight(&Map[city1], new Nodeptr<CityDat>(CityDat(city2, dist)));
-			Node<CityDat>::insertRight(&Map[city2], new Nodeptr<CityDat>(CityDat(city1, dist)));
-		}
-		fin.close();
-	}
-	else
-		cout << "Error opening file: " << file << endl;
-}
-BaseBoard::~BaseBoard() {}
 void BaseBoard::draw()
 {
+	cout << endl << "Original Map!";
 	for (int ii = 0; ii < MSIZE; ii++) {
 		cout << endl << "List " << ii << ": ";
 		Node<CityDat>::printList(&Map[ii]);
 	}
 }
-void BaseBoard::update() {};
 
-DFSBoard::DFSBoard()
+DFSBoard::DFSBoard(short start) :BaseBoard(start)
 {
 	typedef Node<CityDat> Node;
 	typedef Nodeptr<CityDat> Nodeptr;
@@ -71,29 +50,11 @@ DFSBoard::DFSBoard()
 
 	draw();
 }
-DFSBoard::DFSBoard(int start, int end) : BaseBoard::BaseBoard(start, end)
-{
-	typedef Node<CityDat> Node;
-	typedef Nodeptr<CityDat> Nodeptr;
-	done = false;
-
-	for (int ii = 0; ii < MSIZE; ii++) {
-		for (int xx = 0; xx < Node::getSize(&Map[ii]); xx++) {
-			if (startNode != Node::getData(&Map[ii], xx).Destination) {
-				Node::insertRight(&DFSMap[ii], new Nodeptr(Node::getData(&Map[ii], xx)));
-			}
-		}
-	}
-
-	CityDat curNode(this->startNode, 0);
-	Node::insertRight(&path, new Nodeptr(curNode));
-
-	draw();
-}
 void DFSBoard::draw()
 {
 	typedef Node<CityDat> Node;
 	typedef Nodeptr<CityDat> Nodeptr;
+	cout << endl << "DFS:";
 	for (int ii = 0; ii < MSIZE; ii++) {
 		cout << endl << "List " << ii << ": ";
 		Node::printList(&DFSMap[ii]);
@@ -135,30 +96,9 @@ void DFSBoard::update()
 			Node::deleteRight(&path);
 		}
 	}
-
-	draw();
 }
 
-BFSBoard::BFSBoard()
-{
-	typedef Node<CityDat> Node;
-	typedef Nodeptr<CityDat> Nodeptr;
-	done = false;
-
-	for (int ii = 0; ii < MSIZE; ii++) {
-		for (int xx = 0; xx < Node::getSize(&Map[ii]); xx++) {
-			if (startNode != Node::getData(&Map[ii], xx).Destination) {
-				Node::insertRight(&BFSMap[ii], new Nodeptr(Node::getData(&Map[ii], xx)));
-			}
-		}
-	}
-
-	CityDat curNode(startNode, 0);
-	Node::insertRight(&toVisit, new Nodeptr(curNode));
-
-	draw();
-}
-BFSBoard::BFSBoard(int start, int end) : BaseBoard::BaseBoard(start, end)
+BFSBoard::BFSBoard(short start) : BaseBoard(start)
 {
 	typedef Node<CityDat> Node;
 	typedef Nodeptr<CityDat> Nodeptr;
@@ -181,6 +121,7 @@ void BFSBoard::draw()
 {
 	typedef Node<CityDat> Node;
 	typedef Nodeptr<CityDat> Nodeptr;
+	cout << endl << "BFS:";
 	for (int ii = 0; ii < MSIZE; ii++) {
 		cout << endl << "List " << ii << ": ";
 		Node::printList(&BFSMap[ii]);
@@ -245,32 +186,9 @@ void BFSBoard::update()
 			}
 		}
 	}
-
-	draw();
 }
 
-IDSBoard::IDSBoard()
-{
-	typedef Node<CityDat> Node;
-	typedef Nodeptr<CityDat> Nodeptr;
-	depthLimit = 0;
-	depth = 0;
-	done = false;
-
-	for (int ii = 0; ii < MSIZE; ii++) {
-		for (int xx = 0; xx < Node::getSize(&Map[ii]); xx++) {
-			if (startNode != Node::getData(&Map[ii], xx).Destination) {
-				Node::insertRight(&IDSMap[ii], new Nodeptr(Node::getData(&Map[ii], xx)));
-			}
-		}
-	}
-
-	CityDat curNode(startNode, 0);
-	Node::insertRight(&path, new Nodeptr(curNode));
-
-	draw();
-}
-IDSBoard::IDSBoard(int start, int end) : BaseBoard::BaseBoard(start, end)
+IDSBoard::IDSBoard(short start) : BaseBoard(start)
 {
 	typedef Node<CityDat> Node;
 	typedef Nodeptr<CityDat> Nodeptr;
@@ -295,6 +213,7 @@ void IDSBoard::draw()
 {
 	typedef Node<CityDat> Node;
 	typedef Nodeptr<CityDat> Nodeptr;
+	cout << endl << "IDS:";
 	cout << endl << "Depth Limit: " << depthLimit;
 	cout << endl << "Depth: " << depth;
 	for (int ii = 0; ii < MSIZE; ii++) {
@@ -362,6 +281,4 @@ void IDSBoard::update()
 			}
 		}
 	}
-
-	draw();
 }

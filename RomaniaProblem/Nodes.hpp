@@ -1,3 +1,8 @@
+/**
+ * Author: Joshua Renfro
+ * This library was tailored to build the map for our 
+ * Romania Problem with detailed instructions to implement the class
+ */
 #pragma once
 #ifndef NODES_HPP
 #define NODES_HPP
@@ -185,7 +190,7 @@ void Node<NodeDat>::deleteLeft(Node* list)
 	
 	if (list->head == NULL)
 	{
-		std::cout << "\nUnderflow detected!\n" << std::endl;
+		std::cout << "\nUnderflow detected!\n";
 	}
 	else
 	{
@@ -210,7 +215,7 @@ void Node<NodeDat>::deleteRight(Node* list)
 
 	if (list->head == NULL)
 	{
-		std::cout << "\nUnderflow detected!\n" << std::endl;
+		std::cout << "\nUnderflow detected!\n";
 	}
 	else
 	{
@@ -226,12 +231,6 @@ void Node<NodeDat>::deleteRight(Node* list)
 		{
 			list->head = NULL;
 		}
-		//for (int ii = 2; ii < list->size; ii++)
-		//{
-		//	ptr = ptr->next;
-		//}
-		//FREE(ptr->next);
-		//ptr->next = list->head;
 		list->size -= 1;
 	}
 };
@@ -242,7 +241,7 @@ void Node<NodeDat>::deleteNode(Node* list, int index)
 	
 	if (list->head == NULL)
 	{
-		std::cout << "\nList is Empty\n!" << std::endl;
+		std::cout << "\nList is Empty\n!";
 	}
 	else
 	{
@@ -262,13 +261,14 @@ template<typename NodeDat>
 void Node<NodeDat>::deleteList(Node* list)
 {
 	Nodeptr<NodeDat>* ptr;
-	
+
 	if (list->head == NULL)
 	{
-		std::cout << "\nUnderflow detected!\n" << std::endl;
+		std::cout << "\nUnderflow detected!\n";
 	}
 	else
 	{
+		//std::cout << "\nDeleting List!\n";
 		ptr = list->head;
 		for (int ii = 0; ii < list->size; ii++)
 		{
