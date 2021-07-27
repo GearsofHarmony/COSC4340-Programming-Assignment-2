@@ -208,6 +208,10 @@ void BFSBoard::draw(GLFWwindow* window)
 	}
 	cout << endl << "To Visit: ";
 	Node::printList(&toVisit);
+	for (int ii = 0; ii < MSIZE; ii++) {
+		cout << endl << "Probe Path: ";
+		Node::printList(&probePath[ii]);
+	}
 	cout << endl << "Path: ";
 	Node::printList(&path);
 	cout << endl;
@@ -222,22 +226,24 @@ void BFSBoard::update()
 	{
 		curNode = Node::getData(&toVisit, 0);
 		Node::deleteLeft(&toVisit);
-		Node::insertRight(&path, new Nodeptr(curNode));
 		if (curNode.Destination == endNode)
 		{
 			cout << "\nGoal Reached!\n";
+			while (Node::isEmpty(&probePath[curNode.Destination]) == false)
+			{
+				Node::insertLeft(&path, new Nodeptr(curNode));
+				curNode = Node::getData(&probePath[curNode.Destination], 0);
+			}
+			Node::insertLeft(&path, new Nodeptr(curNode));
 			done = true;
 		}
 		else 
 		{
-			if (Node::isEmpty(&BFSMap[curNode.Destination]) == true)
-			{
-				Node::deleteRight(&path);
-			}
 			while (Node::isEmpty(&BFSMap[curNode.Destination]) == false)
 			{
 				CityDat probeNode = Node::getData(&BFSMap[curNode.Destination], 0);
 				Node::insertRight(&toVisit, new Nodeptr(probeNode));
+				Node::insertRight(&probePath[probeNode.Destination], new Nodeptr(curNode));
 				Node::deleteLeft(&BFSMap[curNode.Destination]);
 				for (int ii = 0; ii < MSIZE; ii++) {
 					for (int xx = 0; xx < Node::getSize(&BFSMap[ii]); xx++) {
@@ -245,6 +251,17 @@ void BFSBoard::update()
 							Node::deleteNode(&BFSMap[ii], xx);
 						}
 					}
+				}
+			}
+		}
+	}
+	else
+	{
+		for (int ii = 0; ii < MSIZE; ii++) {
+			Node::deleteList(&BFSMap[ii]);
+			for (int xx = 0; xx < Node::getSize(&Map[ii]); xx++) {
+				if (startNode != Node::getData(&Map[ii], xx).Destination) {
+					Node::insertRight(&BFSMap[ii], new Nodeptr(Node::getData(&Map[ii], xx)));
 				}
 			}
 		}

@@ -155,6 +155,7 @@ class BFSBoard : BaseBoard
 protected:
 	Node<CityDat> BFSMap[MSIZE];
 	Node<CityDat> toVisit;
+	Node<CityDat> probePath[MSIZE];
 	Node<CityDat> path;
 	bool done;
 
