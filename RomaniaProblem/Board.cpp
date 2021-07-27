@@ -21,6 +21,27 @@ BaseBoard::BaseBoard()
 	else
 		cout << "Error opening file: " << file << endl;
 }
+BaseBoard::BaseBoard(int start, int end)
+{
+	// startNode and endNode is here temporarily I'll leave it to you to to initialize them elsewhere
+	this->startNode = start;
+	this->endNode = end;
+	char file[] = { "input.txt" };
+	int city1, city2, dist;
+	fstream fin(file, ios::in);
+	if (fin.is_open())
+	{
+		while (fin.eof() == false)
+		{
+			fin >> city1 >> city2 >> dist;
+			Node<CityDat>::insertRight(&Map[city1], new Nodeptr<CityDat>(CityDat(city2, dist)));
+			Node<CityDat>::insertRight(&Map[city2], new Nodeptr<CityDat>(CityDat(city1, dist)));
+		}
+		fin.close();
+	}
+	else
+		cout << "Error opening file: " << file << endl;
+}
 BaseBoard::~BaseBoard() {}
 void BaseBoard::draw()
 {
@@ -46,6 +67,25 @@ DFSBoard::DFSBoard()
 	}
 
 	CityDat curNode(startNode, 0);
+	Node::insertRight(&path, new Nodeptr(curNode));
+
+	draw();
+}
+DFSBoard::DFSBoard(int start, int end) : BaseBoard::BaseBoard(start, end)
+{
+	typedef Node<CityDat> Node;
+	typedef Nodeptr<CityDat> Nodeptr;
+	done = false;
+
+	for (int ii = 0; ii < MSIZE; ii++) {
+		for (int xx = 0; xx < Node::getSize(&Map[ii]); xx++) {
+			if (startNode != Node::getData(&Map[ii], xx).Destination) {
+				Node::insertRight(&DFSMap[ii], new Nodeptr(Node::getData(&Map[ii], xx)));
+			}
+		}
+	}
+
+	CityDat curNode(this->startNode, 0);
 	Node::insertRight(&path, new Nodeptr(curNode));
 
 	draw();
@@ -100,6 +140,25 @@ void DFSBoard::update()
 }
 
 BFSBoard::BFSBoard()
+{
+	typedef Node<CityDat> Node;
+	typedef Nodeptr<CityDat> Nodeptr;
+	done = false;
+
+	for (int ii = 0; ii < MSIZE; ii++) {
+		for (int xx = 0; xx < Node::getSize(&Map[ii]); xx++) {
+			if (startNode != Node::getData(&Map[ii], xx).Destination) {
+				Node::insertRight(&BFSMap[ii], new Nodeptr(Node::getData(&Map[ii], xx)));
+			}
+		}
+	}
+
+	CityDat curNode(startNode, 0);
+	Node::insertRight(&toVisit, new Nodeptr(curNode));
+
+	draw();
+}
+BFSBoard::BFSBoard(int start, int end) : BaseBoard::BaseBoard(start, end)
 {
 	typedef Node<CityDat> Node;
 	typedef Nodeptr<CityDat> Nodeptr;
@@ -191,6 +250,27 @@ void BFSBoard::update()
 }
 
 IDSBoard::IDSBoard()
+{
+	typedef Node<CityDat> Node;
+	typedef Nodeptr<CityDat> Nodeptr;
+	depthLimit = 0;
+	depth = 0;
+	done = false;
+
+	for (int ii = 0; ii < MSIZE; ii++) {
+		for (int xx = 0; xx < Node::getSize(&Map[ii]); xx++) {
+			if (startNode != Node::getData(&Map[ii], xx).Destination) {
+				Node::insertRight(&IDSMap[ii], new Nodeptr(Node::getData(&Map[ii], xx)));
+			}
+		}
+	}
+
+	CityDat curNode(startNode, 0);
+	Node::insertRight(&path, new Nodeptr(curNode));
+
+	draw();
+}
+IDSBoard::IDSBoard(int start, int end) : BaseBoard::BaseBoard(start, end)
 {
 	typedef Node<CityDat> Node;
 	typedef Nodeptr<CityDat> Nodeptr;

@@ -166,7 +166,31 @@ void test()
 }
 /// From start to can be deleted. All for testing!
 
+bool complete(DFSBoard d, BFSBoard b, IDSBoard i) {
+	return d.isDone() && b.isDone() && i.isDone();
+}
+void mainRun() {
+	int choice;
+	for (int i = 0; i < 20; ++i)
+		cout << CityDat(i, 0) << "\t: " << i << std::endl;
+	cout << "From the above, select a starting city by number: ";
+	cin >> choice;
+	DFSBoard dfs = DFSBoard(short(choice), short(0));
+	BFSBoard bfs = BFSBoard(short(choice), short(0));
+	IDSBoard ids = IDSBoard(short(choice), short(0));
+	while (!complete(dfs, bfs, ids)) {
+		if (!dfs.isDone()) dfs.update();
+		if (!bfs.isDone()) bfs.update();
+		if (!ids.isDone()) ids.update();
+	}
+	cout << "DFS FINAL:" << endl;
+	dfs.draw();
+	cout << "BFS FINAL:" << endl;
+	bfs.draw();
+	cout << "IDS FINAL:" << endl;
+	ids.draw();
+}
 int main()
 {
-
+	mainRun();
 }

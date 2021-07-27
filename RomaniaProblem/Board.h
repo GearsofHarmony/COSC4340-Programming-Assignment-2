@@ -52,16 +52,17 @@ struct CityDat
  */
 class BaseBoard
 {
-protected:
+
+public:
 	Node<CityDat> Map[MSIZE];
 	short startNode;
 	short endNode;
 
-public:
 	/**
 	* This constructor reads from a file that contains the map data and builds the map
 	*/
 	BaseBoard();
+	BaseBoard(int, int);
 	// Currently does nothing
 	~BaseBoard();
 	/**
@@ -91,6 +92,7 @@ protected:
 
 public:
 	DFSBoard();
+	DFSBoard(int,int);
 	/// @return if the search is done or not
 	bool isDone() { return done; }
 	/**
@@ -120,6 +122,7 @@ protected:
 
 public:
 	BFSBoard();
+	BFSBoard(int, int);
 	/// @return if the search is done or not
 	bool isDone() { return done; }
 	/**
@@ -150,6 +153,7 @@ protected:
 
 public:
 	IDSBoard();
+	IDSBoard(int, int);
 	/// @return if the search is done or not
 	bool isDone() { return done; }
 	/**

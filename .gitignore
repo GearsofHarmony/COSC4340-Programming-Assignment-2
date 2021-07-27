@@ -9,3 +9,10 @@ RomaniaProblem/x64/Debug/RomaniaProblem.tlog/RomaniaProblem.lastbuildstate
 *.log
 *.idb
 *.pdb
+*.obj
+*.tlog
+RomaniaProblem/x64/Debug/RomaniaProblem.tlog/unsuccessfulbuild
+*.lastbuildstate
+*.obj
+*.idb
+*.pdb
