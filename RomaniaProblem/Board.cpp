@@ -1,10 +1,34 @@
 #include "Board.h"
 
+
 BaseBoard::BaseBoard()
 {
 	// startNode and endNode is here temporarily I'll leave it to you to to initialize them elsewhere
-	startNode = 0;
-	endNode = 4;
+	this->startNode = 0;
+	this->endNode = 4;
+	char file[] = { "input.txt" };
+	int city1, city2, dist;
+	fstream fin(file, ios::in);
+	if (fin.is_open())
+	{
+		//std::cout << "input open, loading cities.." <<std::endl;
+		while (fin.eof() == false)
+		{
+			fin >> city1 >> city2 >> dist;
+			//std::cout << "Loading: " <<city1 <<", " << city2 << ": " << dist << CityDat(city2, dist) << std::endl;
+			Node<CityDat>::insertRight(&Map[city1], new Nodeptr<CityDat>(CityDat(city2, dist)));
+			Node<CityDat>::insertRight(&Map[city2], new Nodeptr<CityDat>(CityDat(city1, dist)));
+		}
+		fin.close();
+	}
+	else
+		cout << "Error opening file: " << file << endl;
+}
+BaseBoard::BaseBoard(short startNode, short endNode)
+{
+	// startNode and endNode is here temporarily I'll leave it to you to to initialize them elsewhere
+	this->startNode = startNode;
+	this->endNode = endNode;
 	char file[] = { "input.txt" };
 	int city1, city2, dist;
 	fstream fin(file, ios::in);
@@ -22,30 +46,31 @@ BaseBoard::BaseBoard()
 		cout << "Error opening file: " << file << endl;
 }
 BaseBoard::~BaseBoard() {}
-void BaseBoard::draw()
+void BaseBoard::draw(GLFWwindow* window)
 {
-	for (int ii = 0; ii < MSIZE; ii++) {
+	/*for (int ii = 0; ii < MSIZE; ii++) {
 		cout << endl << "List " << ii << ": ";
 		Node<CityDat>::printList(&Map[ii]);
-	}
+	}*/
 }
 void BaseBoard::update() {};
 
-
-void SelectionBoard::draw() {
-	
+SelectionBoard::SelectionBoard() {
+}
+void SelectionBoard::draw(GLFWwindow* window) {
+	BaseBoard::draw(window);
 }
 void SelectionBoard::update() {
 
 }
 bool SelectionBoard::makingChoices() {
-	return true;
+	return false;
 }
-City SelectionBoard::getStartingPoint() {
-	return City::Bucharest;
+short SelectionBoard::getStartingPoint() {
+	return 0;
 }
-City SelectionBoard::getEndingPoint() {
-	return City::Timisoara;
+short SelectionBoard::getEndingPoint() {
+	return 4;
 }
 
 DFSBoard::DFSBoard()
@@ -65,12 +90,12 @@ DFSBoard::DFSBoard()
 	CityDat curNode(startNode, 0);
 	Node::insertRight(&path, new Nodeptr(curNode));
 
-	draw();
+	
 }
 
-DFSBoard::DFSBoard(City startingPoint, City endingPoint) {
-	this->startNode = short(startingPoint);
-	this->endNode = short(endingPoint);
+DFSBoard::DFSBoard(short startingPoint, short endingPoint) {
+	this->startNode = startingPoint;
+	this->endNode = endingPoint;
 	typedef Node<CityDat> Node;
 	typedef Nodeptr<CityDat> Nodeptr;
 	done = false;
@@ -87,7 +112,7 @@ DFSBoard::DFSBoard(City startingPoint, City endingPoint) {
 	Node::insertRight(&path, new Nodeptr(curNode));
 }
 
-void DFSBoard::draw()
+void DFSBoard::draw(GLFWwindow* window)
 {
 	typedef Node<CityDat> Node;
 	typedef Nodeptr<CityDat> Nodeptr;
@@ -133,7 +158,6 @@ void DFSBoard::update()
 		}
 	}
 
-	draw();
 }
 
 BFSBoard::BFSBoard()
@@ -153,12 +177,12 @@ BFSBoard::BFSBoard()
 	CityDat curNode(startNode, 0);
 	Node::insertRight(&toVisit, new Nodeptr(curNode));
 
-	draw();
+	
 }
 
-BFSBoard::BFSBoard(City startingPoint, City endingPoint) {
-	this->startNode = short(startingPoint);
-	this->endNode = short(endingPoint);
+BFSBoard::BFSBoard(short startingPoint, short endingPoint) {
+	this->startNode = startingPoint;
+	this->endNode = endingPoint;
 	typedef Node<CityDat> Node;
 	typedef Nodeptr<CityDat> Nodeptr;
 	done = false;
@@ -174,7 +198,7 @@ BFSBoard::BFSBoard(City startingPoint, City endingPoint) {
 	CityDat curNode(startNode, 0);
 	Node::insertRight(&toVisit, new Nodeptr(curNode));
 }
-void BFSBoard::draw()
+void BFSBoard::draw(GLFWwindow* window)
 {
 	typedef Node<CityDat> Node;
 	typedef Nodeptr<CityDat> Nodeptr;
@@ -226,7 +250,7 @@ void BFSBoard::update()
 		}
 	}
 
-	draw();
+	
 }
 
 IDSBoard::IDSBoard()
@@ -248,9 +272,9 @@ IDSBoard::IDSBoard()
 	CityDat curNode(startNode, 0);
 	Node::insertRight(&path, new Nodeptr(curNode));
 
-	draw();
+	
 }
-IDSBoard::IDSBoard(City startingPoint, City endingPoint) {
+IDSBoard::IDSBoard(short startingPoint, short endingPoint) {
 	this->startNode = short(startingPoint);
 	this->endNode = short(endingPoint);
 
@@ -272,7 +296,7 @@ IDSBoard::IDSBoard(City startingPoint, City endingPoint) {
 	Node::insertRight(&path, new Nodeptr(curNode));
 }
 
-void IDSBoard::draw()
+void IDSBoard::draw(GLFWwindow* window)
 {
 	typedef Node<CityDat> Node;
 	typedef Nodeptr<CityDat> Nodeptr;
@@ -344,5 +368,4 @@ void IDSBoard::update()
 		}
 	}
 
-	draw();
 }

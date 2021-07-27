@@ -3,14 +3,14 @@ GraphicalInterface::GraphicalInterface() {
 	this->sb = SelectionBoard();
 	this->initializing = true;
 }
-void GraphicalInterface::draw() {
+void GraphicalInterface::draw(GLFWwindow* window) {
 	if (this->initializing) {
-		this->sb.draw();
+		this->sb.draw(window);
 	}
 	else {
-		this->bfs.draw();
-		this->dfs.draw();
-		this->ids.draw();
+		this->bfs.draw(window);
+		this->dfs.draw(window);
+		this->ids.draw(window);
 	}
 }
 void GraphicalInterface::update() {
@@ -25,8 +25,8 @@ void GraphicalInterface::update() {
 	}
 }
 void GraphicalInterface::init() {
-	City startingPoint = this->sb.getStartingPoint();
-	City endingPoint   = this->sb.getEndingPoint();
+	short startingPoint = this->sb.getStartingPoint();
+	short endingPoint   = this->sb.getEndingPoint();
 	this->bfs = BFSBoard(startingPoint, endingPoint);
 	this->dfs = DFSBoard(startingPoint, endingPoint);
 	this->ids = IDSBoard(startingPoint, endingPoint);
@@ -35,10 +35,10 @@ void GraphicalInterface::init() {
 bool GraphicalInterface::isMore() {
 	return (!this->bfs.isDone() || !this->dfs.isDone() || !this->ids.isDone() || this->initializing);
 }
-void GraphicalInterface::run() {
+void GraphicalInterface::run(GLFWwindow* window) {
 	if (this->isMore()) {
 		this->update();
-		this->draw();
+		this->draw(window);
 	}
-	std::cout << "[INFO] PROGRAM COMPLETE." << std::endl;
+	
 }
