@@ -2,3 +2,10 @@
 **/.vs/*
 RomaniaProblem/Debug/*
 RomaniaProblem/Release/*
+RomaniaProblem/x64/Debug/RomaniaProblem.tlog/unsuccessfulbuild
+*.tlog
+RomaniaProblem/x64/Debug/RomaniaProblem.tlog/RomaniaProblem.lastbuildstate
+*.obj
+*.log
+*.idb
+*.pdb
