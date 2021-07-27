@@ -1,7 +1,2 @@
-﻿  glad.c
-  Board.cpp
-  main.cpp
-  math.cpp
-  shader.cpp
-  Generating Code...
-LINK : fatal error LNK1104: cannot open file 'C:\Users\jrdar\Documents\Projects\COSC4340-Programming-Assignment-2\RomaniaProblem\packages\glfw.3.3.4\build\native\lib\dynamic\v142\x64\glfw3dll.lib'
+﻿  main.cpp
+  RomaniaProblem.vcxproj -> G:\Users\Shenzao\Documents\College\Artificial Intelligence\Programming Assignment 1\COSC4340-Programming-Assignment-2\RomaniaProblem\x64\Debug\RomaniaProblem.exe

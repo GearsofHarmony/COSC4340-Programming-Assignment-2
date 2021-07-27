@@ -170,8 +170,8 @@ bool complete(DFSBoard d, BFSBoard b, IDSBoard i) {
 	return d.isDone() && b.isDone() && i.isDone();
 }
 void mainRun() {
-	int choice;
-	for (int i = 0; i < 20; ++i)
+	short choice;
+	for (short i = 0; i < 20; ++i)
 		cout << CityDat(i, 0) << "\t: " << i << std::endl;
 	cout << "From the above, select a starting city by number: ";
 	cin >> choice;
